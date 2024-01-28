@@ -1,0 +1,40 @@
+<aura:component controller="AllMissionsController" implements="forceCommunity:availableForAllPageTypes" access="global">
+    <aura:attribute name="missionList" type="List" default="[]"/>
+
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+
+    <aura:handler name="selectMission" event="c:selectMission" action="{!c.handleSelectMission}"/>
+
+    <lightning:empApi aura:id="empApi" />
+    <lightning:messageChannel type="selectMissionChannel__c" aura:id="selectMissionChannel"/>
+
+    <lightning:card class="slds-p-around_small slds-card">
+        <aura:set attribute="title">
+            All Missions
+            <lightning:icon iconName="utility:topic" size="small"/>
+            
+        </aura:set>
+        <lightning:layout multipleRows="true" class="slds-box slds-box_xx-small slds-theme_shade gray">
+        
+        <lightning:layoutItem size="2" padding="around-small">
+            <div class="custom-box">Rank</div>
+        </lightning:layoutItem>
+        <lightning:layoutItem size="6" padding="around-small">
+            <div class="custom-box">Mission</div>
+        </lightning:layoutItem>
+        <lightning:layoutItem size="2" padding="around-small">
+            <div class="custom-box">Guild</div>
+        </lightning:layoutItem>
+        <lightning:layoutItem size="2" padding="around-small">
+            <div class="custom-box">Status</div>
+        </lightning:layoutItem>
+    </lightning:layout> 
+    <aura:iteration items="{!v.missionList}" var="mission">
+        <c:MissionItem mission="{!mission}"></c:MissionItem>
+    </aura:iteration>
+    </lightning:card>
+    
+    
+    
+    
+</aura:component>	

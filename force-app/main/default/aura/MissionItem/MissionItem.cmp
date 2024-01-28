@@ -1,0 +1,27 @@
+<aura:component>
+    
+    <aura:attribute name="mission" type="Object" access="public" />
+    <aura:attribute name="statusBageClass" type="String" access="public" />
+
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+
+    <aura:registerEvent name="selectMission" type="c:selectMission"/>
+
+    <div class="slds-border_bottom" onclick="{!c.selectMission}">
+        <lightning:layout multipleRows="true" class="{!IF(v.mission.selected, 'grey-box')}">
+            <lightning:layoutItem size="2" padding="around-small">
+                    <lightning:badge label="{!v.mission.Complexity_Rank__c}" class="black-badge"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="6" padding="around-small">
+                <div class="custom-box">{!v.mission.Subject__c}</div>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="2" padding="around-small">
+                <div class="custom-box">{!v.mission.Guild__r.Name}</div>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="2" padding="around-small">
+                <div class="custom-box"><lightning:badge label="{!v.mission.Status__c}" class="{!v.statusBageClass}"/></div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+    
+</aura:component>	

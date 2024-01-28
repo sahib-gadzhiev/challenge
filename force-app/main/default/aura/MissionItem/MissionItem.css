@@ -1,0 +1,25 @@
+.THIS .black-badge {
+    background-color: black;
+    color: white;
+    border-radius: 0;
+}
+
+.THIS .green-badge {
+    background-color: green;
+    color: white;
+}
+
+.THIS .gray-badge {
+    background-color: gray;
+    color: white;
+}
+
+.THIS .blue-badge {
+    background-color: blue;
+    color: white;
+}
+.THIS .grey-box {
+    background-color: #d3d6d8;
+    border-color:#F1F3F5;
+    border-radius: var(--lwc-borderRadiusMedium,0.25rem);
+}
