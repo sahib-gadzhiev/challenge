@@ -1,7 +1,7 @@
 ({
     getAvailableMissions : function(component,event, helper) {
         let misisonList = [];
-        var action = component.get("c.getAllMissions");
+        let action = component.get("c.getAllMissions");
         action.setCallback(this, (response) => {
             console.log('response', response);
             let state = response.getState();
@@ -9,16 +9,17 @@
                 misisonList = response.getReturnValue();
                 console.log('misisonList', misisonList);
                 component.set("v.missionList", misisonList);
+                
             }
             else if (state === "INCOMPLETE") {
                 
             }
             else if (state === "ERROR") {
-                var errors = response.getError();
+                let errors = response.getError();
                 if (errors) {
                     if (errors[0] && errors[0].message) {
-                        console.log("Error message: " + 
-                                 errors[0].message);
+                        console.log("Error message: ",
+                                 errors);
                     }
                 } else {
                     console.log("Unknown error");
@@ -47,7 +48,7 @@
         console.log(missionList);
         component.set("v.missionList", missionList);
 
-        var payload = {
+        let payload = {
             recordId: missionId,
         };
         component.find("selectMissionChannel").publish(payload);

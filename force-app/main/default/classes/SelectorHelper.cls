@@ -23,6 +23,7 @@ public with sharing class SelectorHelper {
                     Subject__c 
             FROM    Superhero_Mission__c 
             WHERE   Id = :recordId
+            WITH    SECURITY_ENFORCED
             LIMIT   1
         ];
     }
@@ -36,8 +37,10 @@ public with sharing class SelectorHelper {
                     Status__c, 
                     Subject__c 
             FROM    Superhero_Mission__c 
-            WHERE   Id = : idList
-            LIMIT   50000
+            WHERE   Id = : idList 
+            WITH    SECURITY_ENFORCED
+            LIMIT   50000 
+            
         ];
     }
 
@@ -50,6 +53,7 @@ public with sharing class SelectorHelper {
                      
             FROM    Hero__c 
             WHERE   Id = : idList
+            WITH    SECURITY_ENFORCED
             LIMIT   50000
         ];
     }
@@ -60,9 +64,22 @@ public with sharing class SelectorHelper {
             FROM    Mission_Assignment__c 
             WHERE   Hero__c = :contactId 
             AND     Mission__c = :missionId
+            WITH    SECURITY_ENFORCED
             LIMIT  1
         ];
 
         return assignmentList.size() > 0 ? assignmentList[0] : null;
+    }
+
+    public static Hero__c getHeroByCurrentUser() {
+        User customerUser = [SELECT id, ContactId FROM User WHERE Id =:UserInfo.getUserId() LIMIT 1];
+        Id contactId = customerUser.contactId;
+        return [
+            SELECT  Id, Guild__c 
+            FROM    HERO__c 
+            WHERE   Contact__c = :contactId  
+            WITH    SECURITY_ENFORCED 
+            LIMIT   1
+        ];
     }
 }

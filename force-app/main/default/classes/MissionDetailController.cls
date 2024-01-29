@@ -1,15 +1,14 @@
 public with sharing class MissionDetailController {
-    public static String contactId = 'a01Qy000009TWP7IAO';
 
     @AuraEnabled(cacheable=true)
     public static  Map<String, SObject> getMissionAssignment(Id missionId){
         try {
-            // User customerUser = [SELECT id, ContactId FROM User WHERE ContactId =:contactIdList];
-            // contactId = customerUser.contactId;
+            Hero__c hero = SelectorHelper.getHeroByCurrentUser();
             Superhero_Mission__c mission = WithoutSharingSelector.getHeroMissionById(missionId);
-            Mission_Assignment__c assignment = SelectorHelper.getMissionAssignment(contactId, missionId);
+            Mission_Assignment__c assignment = SelectorHelper.getMissionAssignment(hero.Id, missionId);
 
             Map<String, SObject> responseMap = new Map<String, SObject>();
+            //todo remove hardcode
             responseMap.put('mission',mission);
             responseMap.put('assignment',assignment);
             return responseMap;
@@ -21,14 +20,14 @@ public with sharing class MissionDetailController {
     @AuraEnabled
     public static Mission_Assignment__c createAssignment(String missionId){
         try {
+            Hero__c hero = SelectorHelper.getHeroByCurrentUser();
             Mission_Assignment__c missionAssignment = new Mission_Assignment__c();
-            missionAssignment.Hero__c = contactId;
+            missionAssignment.Hero__c = hero.Id;
             missionAssignment.Mission__c = missionId;
-            insert missionAssignment;
-
-            return SelectorHelper.getMissionAssignment(contactId, missionId);
+            WithoutSharingSelector.insertRecords(new List<SObject> {missionAssignment});
+            return SelectorHelper.getMissionAssignment(hero.Id, missionId);
         } catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
+           throw new AuraHandledException(e.getMessage());
         }
     }
 

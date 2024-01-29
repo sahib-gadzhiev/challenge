@@ -2,12 +2,14 @@
     init : function(component, event, helper) {
         helper.getAvailableMissions(component, event, helper);
         const empApi = component.find('empApi');
+        // Uncomment below line to enable debug logging (optional)
+        empApi.setDebugFlag(true);
         empApi.onError($A.getCallback(error => {
             // Error can be any type of error (subscribe, unsubscribe...)
             console.error('EMP API error: ', JSON.stringify(error));
         }));
         
-        const channel = '/event/Superhero_Mission__ChangeEvent';
+        const channel = '/data/Superhero_Mission__ChangeEvent';
         // Replay option to get new events
         const replayId = -1;
 
@@ -23,7 +25,6 @@
         }).catch(error=> {
             console.log('event error', error);
         });
-
     },
 
     handleSelectMission : function(component, event, helper) {

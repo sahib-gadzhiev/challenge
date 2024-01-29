@@ -60,7 +60,7 @@ public with sharing class MissionAssignmentTriggerHandler {
         for(Mission_Assignment__c assignment : recordList) {
             missionIdList.add(assignment.Mission__c);
         }
-        Map<Id, Superhero_Mission__c> missionMap = new Map <Id, Superhero_Mission__c>(SelectorHelper.getHeroMissionsByIds(missionIdList));
+        Map<Id, Superhero_Mission__c> missionMap = new Map <Id, Superhero_Mission__c>(WithoutSharingSelector.getHeroMissionsByIds(missionIdList));
 
 
         for(Superhero_Mission__c mission : missionMap.values()) {
@@ -69,7 +69,7 @@ public with sharing class MissionAssignmentTriggerHandler {
             }
         }
 
-        update missionMap.values();
+        WithoutSharingSelector.updateRecords(missionMap.values());
     }
 
     static void validateMissionsAccess(List<Mission_Assignment__c> recordList) {
@@ -79,9 +79,8 @@ public with sharing class MissionAssignmentTriggerHandler {
             missionIdList.add(assignment.Mission__c);
             heroIdList.add(assignment.Hero__c);
         }
-        Map<Id, Superhero_Mission__c> missionMap = new Map <Id, Superhero_Mission__c>(SelectorHelper.getHeroMissionsByIds(missionIdList));
+        Map<Id, Superhero_Mission__c> missionMap = new Map <Id, Superhero_Mission__c>(WithoutSharingSelector.getHeroMissionsByIds(missionIdList));
         Map<Id, Hero__c> heroMap = new Map <Id, Hero__c>(SelectorHelper.getHeroesByIds(heroIdList));
-
 
         
         for(Mission_Assignment__c assignment : recordList) {
@@ -101,7 +100,7 @@ public with sharing class MissionAssignmentTriggerHandler {
             }
                 
         }
-        Map<Id, Superhero_Mission__c> missionMap = new Map <Id, Superhero_Mission__c>(SelectorHelper.getHeroMissionsByIds(missionIdList));
+        Map<Id, Superhero_Mission__c> missionMap = new Map <Id, Superhero_Mission__c>(WithoutSharingSelector.getHeroMissionsByIds(missionIdList));
 
         for(Superhero_Mission__c mission : missionMap.values()) {
             if(mission.Status__c == ConstantsHelper.IN_PROGRESS_STATUS) {
@@ -109,7 +108,7 @@ public with sharing class MissionAssignmentTriggerHandler {
                 completedMissionIdList.add(mission.Id);
             }
         }
-        update missionMap.values();
+        WithoutSharingSelector.updateRecords(missionMap.values());
 
         List<Mission_Assignment__c> otherAssignmentList = [
             SELECT  Id, Status__c 

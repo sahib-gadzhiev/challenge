@@ -1,5 +1,5 @@
 <template>
-    <lightning-card icon-name="utility:fallback" variant="base" if:true={recordId} >
+    <lightning-card icon-name="utility:fallback" variant="base" if:true={mission} >
         <div slot="title">
             Mission Details
         </div>
@@ -10,19 +10,26 @@
               size="small"
               variant="base"
             ></lightning-spinner>
-            <lightning-record-view-form
-                object-api-name={objectApiName}
-                record-id={recordId}
-            >
-                <lightning-output-field field-name="Subject__c"> </lightning-output-field>
-                <lightning-output-field field-name="Details__c"> </lightning-output-field>
-                <lightning-output-field field-name="Complexity_Rank__c" class="slds-border_bottom"></lightning-output-field>
-                <lightning-output-field field-name="Reward__c"> </lightning-output-field>
-                <lightning-output-field field-name="Deadline__c"> </lightning-output-field>
+            <c-field-displaying label="Subject">
+                <lightning-formatted-text  value={mission.Subject__c} ></lightning-formatted-text>
+            </c-field-displaying>
 
+            <c-field-displaying label="Details">
+                <lightning-formatted-text value={mission.Details__c} ></lightning-formatted-text>
+            </c-field-displaying>
 
-            </lightning-record-view-form>
+            <c-field-displaying label="Complexity Rank">
+                <lightning-formatted-text value={mission.Complexity_Rank__c}  ></lightning-formatted-text>
+            </c-field-displaying>
+            <div class="slds-border_bottom slds-p-around_xxx-small" style="width : 100%"></div>
+            <c-field-displaying label="Reward">
+                <lightning-formatted-number value={mission.Reward__c} format-style="currency"></lightning-formatted-number>
+            </c-field-displaying>
 
+            <c-field-displaying label="Deadline">
+                <lightning-formatted-date-time value={mission.Deadline__c}></lightning-formatted-date-time>
+            </c-field-displaying>
+            
             <div class="slds-clearfix">
                     <lightning-button 
                     if:true={showCreateAssignment}

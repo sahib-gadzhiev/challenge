@@ -1,6 +1,6 @@
 public without sharing class WithoutSharingSelector {
     public static List<Superhero_Mission__c> getHeroMissionsForHero(Id heroId) {
-        Hero__c hero = [SELECT Id, Guild__c FROM HERO__c WHERE Id = :heroId];
+        Hero__c hero = [SELECT Id, Guild__c FROM HERO__c WHERE Contact__c = :heroId LIMIT 1];
         return [
             SELECT  Id, 
                     Complexity_Rank__c, 
@@ -11,6 +11,7 @@ public without sharing class WithoutSharingSelector {
             FROM    Superhero_Mission__c
             WHERE   Guild__c = :hero.Guild__c
             OR      Is_Public__c = true 
+            WITH    SECURITY_ENFORCED
             ORDER   BY CreatedDate
             LIMIT   50000
         ];
@@ -23,10 +24,45 @@ public without sharing class WithoutSharingSelector {
                     Name, 
                     Guild__r.Name, 
                     Status__c, 
-                    Subject__c 
+                    Subject__c,
+                    Deadline__c,
+                    Reward__c,
+                    Details__c 
             FROM    Superhero_Mission__c 
             WHERE   Id = :recordId
+            WITH    SECURITY_ENFORCED
             LIMIT   1
         ];
+    }
+
+    public static List<Superhero_Mission__c> getHeroMissionsByIds(List<Id> idList) {
+        return [
+            SELECT  Id, 
+                    Complexity_Rank__c, 
+                    Name, 
+                    Guild__r.Name, 
+                    Status__c, 
+                    Subject__c 
+            FROM    Superhero_Mission__c 
+            WHERE   Id = : idList
+            WITH    SECURITY_ENFORCED
+            LIMIT   50000
+        ];
+    }
+
+    public static void updateRecords(List<Sobject> recordList) {
+        update recordList;
+    }
+
+    public static void insertRecords(List<Sobject> recordList) {
+        insert recordList;
+    }
+
+    public static void upsertRecords(List<Sobject> recordList) {
+        upsert recordList;
+    }
+
+    public static void sendEmails(List<Messaging.SingleEmailMessage> masterListMails) {
+        Messaging.sendEmail(masterListMails);
     }
 }

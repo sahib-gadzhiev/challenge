@@ -15,6 +15,7 @@ export default class MissionDetail extends LightningElement {
     subscription = null;
     context = createMessageContext();
     missionAssinment;
+    mission;
     isLoading = false;
 
     @wire(getMissionAssignment, {missionId : "$recordId"})

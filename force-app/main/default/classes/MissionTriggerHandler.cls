@@ -1,4 +1,6 @@
 public with sharing class MissionTriggerHandler {
+    final static String EMAIL_MESSAGE = 'This email has been sent through Apex';
+    final static String EMAIL_SUBJECT = 'Test Subject';
     public static void onBeforeInsert(List<Superhero_Mission__c> newRecordList) {
     }
 
@@ -19,22 +21,21 @@ public with sharing class MissionTriggerHandler {
     }
 
     static void sendEmailNotificatonToOwner(List<Superhero_Mission__c> recordList, Map<Id, Superhero_Mission__c> oldRecordMap) {
-        EmailTemplate emt= [Select Id from EmailTemplate where DeveloperName = 'Owner_Notification'];
         List<Messaging.SingleEmailMessage> masterListMails = new List<Messaging.SingleEmailMessage>();
 
         for(Superhero_Mission__c mission : recordList) {
             if(mission.Status__c != oldRecordMap.get(mission.Id).Status__c && mission.Status__c == ConstantsHelper.COMPLETED_STATUS ) {
-                
-                Messaging.SingleEmailMessage email = Messaging.renderStoredEmailTemplate(emt.Id, mission.OwnerId, mission.Id);
+                Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
                 email.setSaveAsActivity(false);
                 email.setTargetObjectId(mission.OwnerId);
-                email.setWhatId(mission.Id);
+                //email.setWhatId(mission.Id);
                 email.setSenderDisplayName('Guild Master');
+                email.setSubject(EMAIL_SUBJECT);
+                email.setPlainTextBody(EMAIL_MESSAGE);
                 masterListMails.add(email);
             }
                 
         }
-        System.debug('Messaging.sendEmail ' + masterListMails);
-        Messaging.sendEmail(masterListMails);
+        WithoutSharingSelector.sendEmails(masterListMails);
     }
 }
