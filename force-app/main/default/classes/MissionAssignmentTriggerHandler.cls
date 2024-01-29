@@ -120,19 +120,15 @@ public with sharing class MissionAssignmentTriggerHandler {
         }
         WithoutSharingSelector.updateRecords(missionMap.values());
 
-        List<Mission_Assignment__c> otherAssignmentList = [
-            SELECT  Id, Status__c 
-            FROM    Mission_Assignment__c 
-            WHERE   Mission__c = :completedMissionIdList 
-            AND     Id != :recordList
-            AND     Status__c = :ConstantsHelper.IN_PROGRESS_STATUS
-            LIMIT   10000  
-        ];  
+        List<Mission_Assignment__c> otherAssignmentList = WithoutSharingSelector.getAssignmentsByMissionExludedIds(
+            completedMissionIdList,  
+            new List<Id> (oldRecordMap.keySet())
+        );
         
         for(Mission_Assignment__c assignment : otherAssignmentList) {
             assignment.Status__c = ConstantsHelper.FAILED_STATUS;
         }
 
-        update otherAssignmentList;
+        WithoutSharingSelector.updateRecords(otherAssignmentList);
     }
 }

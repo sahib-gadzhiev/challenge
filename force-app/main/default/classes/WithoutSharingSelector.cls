@@ -51,6 +51,18 @@ public without sharing class WithoutSharingSelector {
         ];
     }
 
+    public static List<Mission_Assignment__c> getAssignmentsByMissionExludedIds(List<Id> completedMissionIdList, List<Id> recordIdList) {
+        return [
+            SELECT  Id, Status__c 
+            FROM    Mission_Assignment__c 
+            WHERE   Mission__c = :completedMissionIdList 
+            AND     Id != :recordIdList
+            AND     Status__c = :ConstantsHelper.IN_PROGRESS_STATUS
+            WITH    SECURITY_ENFORCED
+            LIMIT   10000  
+        ];  
+    }
+
     public static void updateRecords(List<Sobject> recordList) {
         update recordList;
     }
