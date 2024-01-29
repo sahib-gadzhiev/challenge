@@ -26,7 +26,7 @@ public with sharing class EmailNotificationBatch  implements Database.Batchable<
                     email.setSaveAsActivity(false);
                     email.setWhatId(mission.Id);
                     email.setTargetObjectId(hero.Contact__c);
-                    email.setSenderDisplayName('Guild Master');
+                    email.setSenderDisplayName(ConstantsHelper.SENDER_DISPLAY_NAME);
                     email.setTemplateId(emt.Id);
                     masterListMails.add(email);
                 }

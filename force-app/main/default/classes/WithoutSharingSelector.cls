@@ -63,6 +63,8 @@ public without sharing class WithoutSharingSelector {
     }
 
     public static void sendEmails(List<Messaging.SingleEmailMessage> masterListMails) {
-        Messaging.sendEmail(masterListMails);
+        System.debug('email sender result ' + masterListMails);
+        Messaging.SendEmailResult[] resultList = Messaging.sendEmail(masterListMails);
+        System.debug('email sender result ' + resultList);
     }
 }

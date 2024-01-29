@@ -1,6 +1,6 @@
 public with sharing class MissionTriggerHandler {
-    final static String EMAIL_MESSAGE = 'This email has been sent through Apex';
-    final static String EMAIL_SUBJECT = 'Test Subject';
+    final static String EMAIL_MESSAGE = '{0} Mission was completed';
+    final static String EMAIL_SUBJECT = 'Mission Completed';
     public static void onBeforeInsert(List<Superhero_Mission__c> newRecordList) {
     }
 
@@ -22,16 +22,15 @@ public with sharing class MissionTriggerHandler {
 
     static void sendEmailNotificatonToOwner(List<Superhero_Mission__c> recordList, Map<Id, Superhero_Mission__c> oldRecordMap) {
         List<Messaging.SingleEmailMessage> masterListMails = new List<Messaging.SingleEmailMessage>();
-
+        OrgWideEmailAddress emailAddress = [SELECT Id, Address, DisplayName FROM OrgWideEmailAddress WHERE DisplayName= :ConstantsHelper.SENDER_DISPLAY_NAME];
         for(Superhero_Mission__c mission : recordList) {
             if(mission.Status__c != oldRecordMap.get(mission.Id).Status__c && mission.Status__c == ConstantsHelper.COMPLETED_STATUS ) {
                 Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
                 email.setSaveAsActivity(false);
                 email.setTargetObjectId(mission.OwnerId);
-                //email.setWhatId(mission.Id);
-                email.setSenderDisplayName('Guild Master');
+                email.setOrgWideEmailAddressId(emailAddress.Id);
                 email.setSubject(EMAIL_SUBJECT);
-                email.setPlainTextBody(EMAIL_MESSAGE);
+                email.setPlainTextBody(String.format(EMAIL_MESSAGE, new List<String> {mission.Subject__c}));
                 masterListMails.add(email);
             }
                 
