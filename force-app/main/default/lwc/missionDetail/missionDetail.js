@@ -1,13 +1,26 @@
 import { LightningElement, wire } from 'lwc';
 import { publish,subscribe,unsubscribe,createMessageContext,releaseMessageContext } from 'lightning/messageService';
 import selectMissionChannel from "@salesforce/messageChannel/selectMissionChannel__c";
+import updateMissionStatus from "@salesforce/messageChannel/updateMissionStatus__c";
 import getMissionAssignment from '@salesforce/apex/MissionDetailController.getMissionAssignment';
 import createAssignment from '@salesforce/apex/MissionDetailController.createAssignment';
 import completeMission from '@salesforce/apex/MissionDetailController.completeMission';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
+const MISSION_ASSIGNED_LABEL = 'Mission Assigned Successfully';
+const MISSION_COMPLETED_LABEL = 'Mission Completed Successfully';
+const ACCEPT_LABEL= 'Accept';
+const COMPLETE_LABEL = 'Complete';
+const DEADLINE_LABEL= 'Deadline';
+const REWARD_LABEL = 'Reward';
+const RANK_LABEL= 'Complexity Rank';
+const DETAILS_LABEL = 'Details';
+const SUBJECT_LABEL= 'Subject';
+const ERROR_LABEL = 'Error';
 const COMPLETED_STATUS = 'Completed';
+const MISSION_DETAILS_LABEL = 'Mission Details';
 const IN_PROGRESS_STATUS = 'In Progress';
+const SUCCESS_VARIANT = 'success';
 export default class MissionDetail extends LightningElement {
     objectApiName = 'Superhero_Mission__c';
     recordId;
@@ -17,6 +30,17 @@ export default class MissionDetail extends LightningElement {
     missionAssinment;
     mission;
     isLoading = false;
+
+    labels = {
+        ACCEPT_LABEL,
+        COMPLETE_LABEL,
+        DEADLINE_LABEL,
+        REWARD_LABEL,
+        RANK_LABEL,
+        DETAILS_LABEL,
+        SUBJECT_LABEL,
+        MISSION_DETAILS_LABEL
+    }
 
     @wire(getMissionAssignment, {missionId : "$recordId"})
     wiredAssignment({ error, data }) {
@@ -56,7 +80,9 @@ export default class MissionDetail extends LightningElement {
 
     
     handleMessage(message) {
-        this.isLoading = true;
+        if(this.recordId !== message.recordId) {
+            this.isLoading = true;
+        }
         this.recordId = message.recordId;
     }
 
@@ -64,19 +90,11 @@ export default class MissionDetail extends LightningElement {
         createAssignment({
             missionId : this.recordId
         }).then(result => {
-            const event = new ShowToastEvent({
-                title: 'Mission Assigned Successfully',
-                variant: 'success'            
-            });
-            this.dispatchEvent(event);
+            this.fireToastEvent(SUCCESS_VARIANT, MISSION_ASSIGNED_LABEL, '');
             this.missionAssinment = result;
+            this.publishMC();
         }).catch(error => {
-            const event = new ShowToastEvent({
-                title: 'Error',
-                message : error.body.message,
-                variant: 'error'            
-            });
-            this.dispatchEvent(event);
+            this.fireToastEvent(ERROR_LABEL.toLowerCase(), ERROR_LABEL, error.body.message);
             console.log("error", error);
         })
     }
@@ -85,21 +103,29 @@ export default class MissionDetail extends LightningElement {
         completeMission({
             missionAssignmentId : this.missionAssinment.Id
         }).then(result => {
-            const event = new ShowToastEvent({
-                title: 'Mission Completed Successfully',
-                variant: 'success'            
-            });
+            this.fireToastEvent(SUCCESS_VARIANT, MISSION_COMPLETED_LABEL, '');
             this.dispatchEvent(event);
             this.missionAssinment = result;
+            this.publishMC();
         }).catch(error => {
-            const event = new ShowToastEvent({
-                title: 'Error',
-                message : error.body.message,
-                variant: 'error'            
-            });
-            this.dispatchEvent(event);
+            this.fireToastEvent(ERROR_LABEL.toLowerCase(), ERROR_LABEL, error.body.message);
             console.log('error', error);
         });
+    }
+
+    publishMC() {
+        const message = {
+        };
+        publish(this.context, updateMissionStatus, message);
+    }
+
+    fireToastEvent(variant, title, message) {
+        const event = new ShowToastEvent({
+            title: title,
+            message : message,
+            variant: variant            
+        });
+        this.dispatchEvent(event);
     }
 
     get showCreateAssignment() {

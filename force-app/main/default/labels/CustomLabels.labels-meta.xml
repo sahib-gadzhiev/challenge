@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>Count_Assigned_Error</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Count Assigned Error</shortDescription>
+        <value>You can\&apos;t take more then {0} missions</value>
+    </labels>
+    <labels>
+        <fullName>Rank_Error_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Rank Error Message</shortDescription>
+        <value>К сожалению вы слишком слабый на данный момент чтобы взяться за эту работку! Возвращайтесь когда достигните ранга {0}</value>
+    </labels>
+</CustomLabels>

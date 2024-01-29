@@ -1,17 +1,16 @@
 public with sharing class MissionDetailController {
 
     @AuraEnabled(cacheable=true)
-    public static  Map<String, SObject> getMissionAssignment(Id missionId){
+    public static ResponseWrapper getMissionAssignment(Id missionId){
         try {
             Hero__c hero = SelectorHelper.getHeroByCurrentUser();
             Superhero_Mission__c mission = WithoutSharingSelector.getHeroMissionById(missionId);
             Mission_Assignment__c assignment = SelectorHelper.getMissionAssignment(hero.Id, missionId);
 
-            Map<String, SObject> responseMap = new Map<String, SObject>();
-            //todo remove hardcode
-            responseMap.put('mission',mission);
-            responseMap.put('assignment',assignment);
-            return responseMap;
+            ResponseWrapper response = new ResponseWrapper();
+            response.mission = mission;
+            response.assignment = assignment;
+            return response;
         } catch (Exception e) {
             throw new AuraHandledException(e.getMessage());
         }
@@ -42,5 +41,10 @@ public with sharing class MissionDetailController {
         } catch (Exception e) {
             throw new AuraHandledException(e.getMessage());
         }
+    }
+
+    public class ResponseWrapper {
+        @AuraEnabled public Superhero_Mission__c mission;
+        @AuraEnabled public Mission_Assignment__c assignment;
     }
 }

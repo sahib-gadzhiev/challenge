@@ -7,7 +7,8 @@ public with sharing class MissionAssignmentTriggerHandler {
         'D' => 1
     };
    
-    static final String RANK_ERROR_MESSAGE = 'К сожалению вы слишком слабый на данный момент чтобы взяться за эту работку! Возвращайтесь когда достигните ранга {0}';
+    static final String RANK_ERROR_MESSAGE = System.Label.Rank_Error_Message;
+    static final String COUNT_ASINGMENT_ERROR = System.Label.Count_Assigned_Error;
     public static void onBeforeInsert(List<Mission_Assignment__c> newRecordList) {
         validateAssignments(newRecordList);
         validateMissionsAccess(newRecordList);
@@ -42,13 +43,11 @@ public with sharing class MissionAssignmentTriggerHandler {
         ];
         for (AggregateResult ar : groupedResults)  {
             heroMissionNumberMap.put((Id)ar.get('Hero__c'),(Integer)ar.get('expr0'));
-            // System.debug('Campaign ID' + ar.get('Hero__c'));
-            // System.debug('Average amount' + ar.get('expr0'));
         }
 
         for(Mission_Assignment__c assignment : recordList) {
             if(heroMissionNumberMap.get(assignment.Hero__c) >= ConstantsHelper.MAX_MISSION_PER_USER) {
-                assignment.addError('You can\'t take more then ' + ConstantsHelper.MAX_MISSION_PER_USER + ' missions');
+                assignment.addError(String.format(COUNT_ASINGMENT_ERROR, new List<Integer>{ConstantsHelper.MAX_MISSION_PER_USER}));
             }
         }
 

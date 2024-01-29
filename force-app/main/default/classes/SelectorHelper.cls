@@ -85,7 +85,7 @@ public with sharing class SelectorHelper {
 
 
     public static Hero__c getHeroByCurrentUser() {
-        User customerUser = [SELECT id, ContactId FROM User WHERE Id =:UserInfo.getUserId() LIMIT 1];
+        User customerUser = getCurrentUser();
         Id contactId = customerUser.contactId;
         return [
             SELECT  Id, Guild__c 
@@ -95,4 +95,13 @@ public with sharing class SelectorHelper {
             LIMIT   1
         ];
     }
+
+    public static User getCurrentUser() {
+        return [SELECT id, ContactId FROM User WHERE Id =:UserInfo.getUserId() LIMIT 1];
+    }
+
+    public static OrgWideEmailAddress getOrgWideEmailAddress() {
+        return [SELECT Id, Address, DisplayName FROM OrgWideEmailAddress WHERE DisplayName= :ConstantsHelper.SENDER_DISPLAY_NAME LIMIT 1];
+    }
+    
 }

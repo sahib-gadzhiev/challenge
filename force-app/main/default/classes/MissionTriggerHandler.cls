@@ -1,6 +1,7 @@
 public with sharing class MissionTriggerHandler {
     final static String EMAIL_MESSAGE = '{0} Mission was completed';
     final static String EMAIL_SUBJECT = 'Mission Completed';
+    final static Integer BATCH_SIZE = 200;
     public static void onBeforeInsert(List<Superhero_Mission__c> newRecordList) {
     }
 
@@ -17,12 +18,12 @@ public with sharing class MissionTriggerHandler {
     }
 
     static void sendEmailNotificatonToUsers(List<Superhero_Mission__c> recordList) {
-        Database.executeBatch(new EmailNotificationBatch(recordList), 200);
+        Database.executeBatch(new EmailNotificationBatch(recordList), BATCH_SIZE);
     }
 
     static void sendEmailNotificatonToOwner(List<Superhero_Mission__c> recordList, Map<Id, Superhero_Mission__c> oldRecordMap) {
         List<Messaging.SingleEmailMessage> masterListMails = new List<Messaging.SingleEmailMessage>();
-        OrgWideEmailAddress emailAddress = [SELECT Id, Address, DisplayName FROM OrgWideEmailAddress WHERE DisplayName= :ConstantsHelper.SENDER_DISPLAY_NAME];
+        OrgWideEmailAddress emailAddress = SelectorHelper.getOrgWideEmailAddress();
         for(Superhero_Mission__c mission : recordList) {
             if(mission.Status__c != oldRecordMap.get(mission.Id).Status__c && mission.Status__c == ConstantsHelper.COMPLETED_STATUS ) {
                 Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();

@@ -7,6 +7,7 @@
 
     <lightning:empApi aura:id="empApi" />
     <lightning:messageChannel type="selectMissionChannel__c" aura:id="selectMissionChannel"/>
+    <lightning:messageChannel type="updateMissionStatus__c" onMessage="{!c.init}"/>
 
     <lightning:card class="slds-p-around_small slds-card">
         <aura:set attribute="title">

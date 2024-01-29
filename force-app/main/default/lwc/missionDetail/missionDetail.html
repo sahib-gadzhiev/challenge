@@ -1,7 +1,7 @@
 <template>
     <lightning-card icon-name="utility:fallback" variant="base" if:true={mission} >
         <div slot="title">
-            Mission Details
+            {label.MISSION_DETAILS_LABEL}
         </div>
         <div class="slds-p-around_small">
             <lightning-spinner 
@@ -10,37 +10,37 @@
               size="small"
               variant="base"
             ></lightning-spinner>
-            <c-field-displaying label="Subject">
+            <c-field-displaying label={label.SUBJECT_LABEL}>
                 <lightning-formatted-text  value={mission.Subject__c} ></lightning-formatted-text>
             </c-field-displaying>
 
-            <c-field-displaying label="Details">
+            <c-field-displaying label={label.DETAILS_LABEL}>
                 <lightning-formatted-text value={mission.Details__c} ></lightning-formatted-text>
             </c-field-displaying>
 
-            <c-field-displaying label="Complexity Rank">
+            <c-field-displaying label={label.RANK_LABEL}>
                 <lightning-formatted-text value={mission.Complexity_Rank__c}  ></lightning-formatted-text>
             </c-field-displaying>
             <div class="slds-border_bottom slds-p-around_xxx-small" style="width : 100%"></div>
-            <c-field-displaying label="Reward">
+            <c-field-displaying label={label.REWARD_LABEL}>
                 <lightning-formatted-number value={mission.Reward__c} format-style="currency"></lightning-formatted-number>
             </c-field-displaying>
 
-            <c-field-displaying label="Deadline">
+            <c-field-displaying label={label.DEADLINE_LABEL}>
                 <lightning-formatted-date-time value={mission.Deadline__c}></lightning-formatted-date-time>
             </c-field-displaying>
             
             <div class="slds-clearfix">
                     <lightning-button 
                     if:true={showCreateAssignment}
-                    label="Accept" 
+                    label={label.ACCEPT_LABEL}
                     onclick={createAssignment} 
                     class="slds-align_absolute-center"
                 ></lightning-button>
 
                 <lightning-button 
                     if:true={showCompleteMission}
-                    label="Complete" 
+                    label={label.COMPLETE_LABEL} 
                     onclick={completeMission} 
                     class="slds-align_absolute-center"
                 ></lightning-button>
