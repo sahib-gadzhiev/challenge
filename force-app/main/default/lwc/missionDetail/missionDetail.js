@@ -6,6 +6,7 @@ import getMissionAssignment from '@salesforce/apex/MissionDetailController.getMi
 import createAssignment from '@salesforce/apex/MissionDetailController.createAssignment';
 import completeMission from '@salesforce/apex/MissionDetailController.completeMission';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import EMPTY_DETAILS_LABEL from "@salesforce/label/c.Empty_Detail_Label";
 
 const MISSION_ASSIGNED_LABEL = 'Mission Assigned Successfully';
 const MISSION_COMPLETED_LABEL = 'Mission Completed Successfully';
@@ -21,6 +22,8 @@ const COMPLETED_STATUS = 'Completed';
 const MISSION_DETAILS_LABEL = 'Mission Details';
 const IN_PROGRESS_STATUS = 'In Progress';
 const SUCCESS_VARIANT = 'success';
+const IS_PUBLIC_LABEL = 'Is Public';
+
 export default class MissionDetail extends LightningElement {
     objectApiName = 'Superhero_Mission__c';
     recordId;
@@ -39,7 +42,9 @@ export default class MissionDetail extends LightningElement {
         RANK_LABEL,
         DETAILS_LABEL,
         SUBJECT_LABEL,
-        MISSION_DETAILS_LABEL
+        MISSION_DETAILS_LABEL,
+        EMPTY_DETAILS_LABEL,
+        IS_PUBLIC_LABEL
     }
 
     @wire(getMissionAssignment, {missionId : "$recordId"})

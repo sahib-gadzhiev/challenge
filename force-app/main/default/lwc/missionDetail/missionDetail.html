@@ -3,6 +3,10 @@
         <div slot="title">
             {labels.MISSION_DETAILS_LABEL}
         </div>
+
+        <div slot="actions">
+            {mission.Guild__r.Name}
+        </div>
         <div class="slds-p-around_small">
             <lightning-spinner 
                 if:true={isLoading}
@@ -20,6 +24,10 @@
 
             <c-field-displaying label={labels.RANK_LABEL}>
                 <lightning-formatted-text value={mission.Complexity_Rank__c}  ></lightning-formatted-text>
+            </c-field-displaying>
+
+            <c-field-displaying label={labels.IS_PUBLIC_LABEL}>
+                <lightning-input type="checkbox" disabled checked={mission.Is_Public__c} ></lightning-input>
             </c-field-displaying>
             <div class="slds-border_bottom slds-p-around_xxx-small" style="width : 100%"></div>
             <c-field-displaying label={labels.REWARD_LABEL}>
@@ -49,9 +57,7 @@
             
         </div>
     </lightning-card>
-
-    <div if:false={recordId}>
-        Select a mission to learn more about it
-    </div>
-    
+    <lightning-card  variant="base" if:false={mission} >
+        <div class="slds-p-horizontal_small">{labels.EMPTY_DETAILS_LABEL}</div>
+    </lightning-card>
 </template>

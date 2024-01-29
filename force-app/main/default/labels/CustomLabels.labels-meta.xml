@@ -8,6 +8,13 @@
         <value>You can\&apos;t take more then {0} missions</value>
     </labels>
     <labels>
+        <fullName>Empty_Detail_Label</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Empty_Detail_Label</shortDescription>
+        <value>Select a mission to learn more about it</value>
+    </labels>
+    <labels>
         <fullName>Rank_Error_Message</fullName>
         <language>en_US</language>
         <protected>true</protected>

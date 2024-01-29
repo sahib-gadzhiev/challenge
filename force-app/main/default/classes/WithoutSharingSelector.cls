@@ -26,6 +26,7 @@ public without sharing class WithoutSharingSelector {
                     Status__c, 
                     Subject__c,
                     Deadline__c,
+                    Is_Public__c,
                     Reward__c,
                     Details__c 
             FROM    Superhero_Mission__c 

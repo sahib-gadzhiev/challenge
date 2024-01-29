@@ -6,6 +6,13 @@ public with sharing class MissionAssignmentTriggerHandler {
         'C' => 2,
         'D' => 1
     };
+    static final Map<Integer, String> valueRankMap = new Map<Integer, String> {
+        5 => 'S',
+        4 => 'A',
+        3 => 'B',
+        2 => 'C',
+        1 => 'D'
+    };
    
     static final String RANK_ERROR_MESSAGE = System.Label.Rank_Error_Message;
     static final String COUNT_ASINGMENT_ERROR = System.Label.Count_Assigned_Error;
@@ -83,9 +90,13 @@ public with sharing class MissionAssignmentTriggerHandler {
 
         
         for(Mission_Assignment__c assignment : recordList) {
-            Integer rankDifference = rankValueMap.get(heroMap.get(assignment.Hero__c).Rank__c) - rankValueMap.get(missionMap.get(assignment.Mission__c).Complexity_Rank__c);
-            if(Math.abs(rankDifference) > 1){
-                assignment.addError(String.format(RANK_ERROR_MESSAGE, new List<string> {missionMap.get(assignment.Mission__c).Complexity_Rank__c}));
+            Integer missionRank = rankValueMap.get(missionMap.get(assignment.Mission__c).Complexity_Rank__c);
+            Integer heroRank =  rankValueMap.get(heroMap.get(assignment.Hero__c).Rank__c);
+            Integer rankDifference =  missionRank - heroRank;
+            if(rankDifference > 1){
+                Integer minRank = missionRank -1;
+                minRank = minRank < 1 ? 1 : minRank;
+                assignment.addError(String.format(RANK_ERROR_MESSAGE, new List<string> {valueRankMap.get(minRank)}));
             }
         }
     }
