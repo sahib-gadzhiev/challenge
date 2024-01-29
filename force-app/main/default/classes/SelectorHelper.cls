@@ -71,6 +71,19 @@ public with sharing class SelectorHelper {
         return assignmentList.size() > 0 ? assignmentList[0] : null;
     }
 
+    public static Mission_Assignment__c getMissionAssignment(String assignmentId) {
+        List<Mission_Assignment__c> assignmentList = [
+            SELECT  Id, Status__c 
+            FROM    Mission_Assignment__c 
+            WHERE   Id = :assignmentId
+            WITH    SECURITY_ENFORCED
+            LIMIT  1
+        ];
+
+        return assignmentList.size() > 0 ? assignmentList[0] : null;
+    }
+
+
     public static Hero__c getHeroByCurrentUser() {
         User customerUser = [SELECT id, ContactId FROM User WHERE Id =:UserInfo.getUserId() LIMIT 1];
         Id contactId = customerUser.contactId;
