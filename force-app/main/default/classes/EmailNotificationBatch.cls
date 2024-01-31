@@ -38,7 +38,7 @@ public with sharing class EmailNotificationBatch  implements Database.Batchable<
             
         }
         if(!Test.isRunningTest()) {
-            Messaging.sendEmail(masterListMails);
+            Messaging.sendEmail(masterListMails, false);
         }
         
     }
